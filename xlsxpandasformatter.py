@@ -1,8 +1,9 @@
+import logging
+import re
 import matplotlib.pyplot as plt
 from matplotlib import colors
 import pandas as pd
 import numpy as np
-import re
 from xlsxwriter.utility import xl_range, xl_rowcol_to_cell
 
 
@@ -33,6 +34,7 @@ class FormattedWorksheet:
     """
 
     def __init__(self, worksheet, workbook, df, hasIndex, *args, **kwargs):
+        self.logger = logging.getLogger(__name__)
         self.worksheet = worksheet
         self.workbook = workbook
         self.df = df
@@ -175,10 +177,10 @@ class FormattedWorksheet:
         """
         
         if type(colWidthList) is list and len(colWidthList) != self.nCols:
-            print("Warning: length of colWidthList is different from the nb of columns of the dataframe.")
+            self.logger.warning("Length of colWidthList is different from the number of columns of the data frame")
             return
         if type(colFormatList) is list and len(colFormatList) != self.nCols:
-            print("Warning: length of colFormatList is different from the nb of columns of the dataframe.")
+            self.logger.warning("Length of colFormatList is different from the number of columns of the data frame")
             return
        
         if type(colWidthList) is list:
@@ -251,7 +253,7 @@ class FormattedWorksheet:
 
         if type(headerFormat) is list:
             if len(headerFormat) != self.nColLevels:
-                print("ERROR: header format list is not same length as number of column levels.")
+                self.logger.error("Header format list is not same length as number of column levels")
             else:
                 for i, iFormat in enumerate(headerFormat):
                     self.formatTableHeader[i].update(iFormat)
@@ -261,7 +263,7 @@ class FormattedWorksheet:
 
         if type(rowHeight) is list:
             if len(rowHeight) != self.nColLevels:
-                print("ERROR: header rowHeight list is not same length as number of column levels.")
+                self.logger.error("Header rowHeight list is not same length as number of column levels")
             else:
                 for i, height in enumerate(rowHeight):
                     self.headerRowsHeight[i] = height
@@ -275,7 +277,7 @@ class FormattedWorksheet:
 
         if type(indexFormat) is list:
             if len(indexFormat) != self.nIndexLevels:
-                print("ERROR: index format list is not same length as number of index levels.")
+                self.logger.error("Index format list is not same length as number of index levels")
             else:
                 for i, iFormat in enumerate(indexFormat):
                     self.formatTableIndex[i].update(iFormat)
@@ -285,7 +287,7 @@ class FormattedWorksheet:
 
         if type(colWidth) is list:
             if len(colWidth) != self.nIndexLevels:
-                print("ERROR: index colWidth list is not same length as number of index levels.")
+                self.logger.error("Index colWidth list is not same length as number of index levels")
             else:
                 for i, width in enumerate(colWidth):
                     self.indexColWidth[i] = width
